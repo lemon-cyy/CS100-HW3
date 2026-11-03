@@ -1,7 +1,7 @@
 /* CS100 Fall 2026 - HW3 Problem 4: Memory Leak Checker
  *
  * Implement a tiny memory-leak / invalid-free detector. This file is
- * #included by the course driver (like a header): it must define
+ * #included by the course driver(like a header): it must define
  * recorded_malloc / recorded_calloc / recorded_free, the check_leak
  * destructor, and the malloc/calloc/free macros, exactly as described in
  * the handout. Do NOT write a main function here. Do not rename this file.
@@ -28,8 +28,8 @@ static size_t total_records = 0;
 
 void *recorded_malloc(size_t size, int line, const char *file){
     void *ptr = malloc(size);
-    if (ptr != NULL) {
-        if (total_records < MAX_RECORDS) {
+    if(ptr != NULL){
+        if(total_records < MAX_RECORDS){
             records[total_records].ptr = ptr;
             records[total_records].size = size;
             records[total_records].line_no = line;
@@ -40,10 +40,10 @@ void *recorded_malloc(size_t size, int line, const char *file){
     return ptr;
 }
 
-void *recorded_calloc(size_t cnt, size_t each_size, int line, const char *file) {
+void *recorded_calloc(size_t cnt, size_t each_size, int line, const char *file){
     void *ptr = calloc(cnt, each_size);
-    if (ptr != NULL) {
-        if (total_records < MAX_RECORDS) {
+    if(ptr != NULL){
+        if(total_records < MAX_RECORDS){
             records[total_records].ptr = ptr;
             records[total_records].size = cnt * each_size;
             records[total_records].line_no = line;
@@ -55,18 +55,17 @@ void *recorded_calloc(size_t cnt, size_t each_size, int line, const char *file) 
 }
 
 void recorded_free(void *ptr, int line, const char *file){
-    if (ptr == NULL) {
+    if(ptr == NULL){
         return;
     }
-
     int found_index = -1;
-    for (size_t i = 0; i < total_records; i++){
-        if (records[i].ptr == ptr) {
+    for(size_t i = 0; i < total_records; i++){
+        if(records[i].ptr == ptr){
             found_index = i;
             break;
         }
     }
-    if (found_index != -1){
+    if(found_index != -1){
         records[found_index].ptr = NULL;
         free(ptr);
     } 
@@ -81,20 +80,19 @@ void check_leak(void){
     printf("Summary:\n");
     size_t leaked_count = 0;
     size_t leaked_bytes = 0;
-
-    for (size_t i = 0; i < total_records; i++){
-        if (records[i].ptr != NULL) {
-            printf("%zu bytes memory not freed (allocated in file %s, line %d)\n",
+    for(size_t i = 0; i < total_records; i++){
+        if(records[i].ptr != NULL){
+            printf("%zu bytes memory not freed(allocated in file %s, line %d)\n",
                    records[i].size, records[i].file_name, records[i].line_no);
             leaked_count++;
             leaked_bytes += records[i].size;
         }
     }
-
-    if (leaked_count == 0) {
+    if(leaked_count == 0){
         printf("All allocations have been freed.\n");
-    } else {
-        printf("%zu allocation records not freed (%zu bytes in total).\n", 
+    }
+    else{
+        printf("%zu allocation records not freed(%zu bytes in total).\n", 
                leaked_count, leaked_bytes);
     }
 }
