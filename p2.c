@@ -13,30 +13,22 @@ int main(void)
 {
     /* TODO: your code here */
     int n;
-    if (scanf("%d", &n) != 1){
-        return 0;
-    }
-    for (int i = 0; i < n; i++){
+    if(scanf("%d", &n) != 1) return 0;
+    for(int i = 0; i < n; i++){
         int length;
         scanf("%d", &length);
         char *str = (char *)malloc((length + 1) * sizeof(char));
-        if (str == NULL){
-            return 1; 
-        }
+        if(str == NULL) return 1;
         scanf("%s", str);
-        int is_palindrome = 1;
-        for (int j = 0; j < length / 2; j++){
+        int flag = 1;
+        for(int j = 0; j < length / 2; j++){
             if (str[j] != str[length - 1 - j]){
-                is_palindrome = 0;
+                flag = 0;
                 break;
             }
         }
-        if (is_palindrome){
-            printf("Yes\n");
-        } 
-        else{
-            printf("No\n");
-        }
+        if(flag) printf("Yes\n");
+        else printf("No\n");
         free(str);
     }
     return 0;
